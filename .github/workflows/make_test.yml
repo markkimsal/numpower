@@ -35,7 +35,7 @@ jobs:
                   make
 
             - name: Execute tests
-              run: make tests
+              run: make test
               env:
                   NDARRAY_FREEBUFFER: 1
                   USE_ZEND_ALLOC: 1
