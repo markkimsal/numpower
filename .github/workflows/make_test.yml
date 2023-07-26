@@ -8,11 +8,11 @@ jobs:
         strategy:
             max-parallel: 1
             matrix:
-                php: ['8.1']
+                php: ['8.1', '8.2']
                 dependencies: ["liblapacke liblapacke-dev libopenblas0 libopenblas-dev libopenblas0 libopenblas-dev libgd-dev libgd3"]
                 os: [ubuntu-latest]
 
-        name: "PHP: ${{ matrix.php }} "
+        name: "PHP: ${{ matrix.php }}"
 
         steps:
             - name: Checkout code
@@ -26,16 +26,20 @@ jobs:
                   extensions: gd, numpower-Numpower/numpower@main
                   tools: phpize
               env:
-                NUMPOWER_LINUX_LIBS: liblapacke liblapacke-dev libopenblas0 libopenblas-dev libopenblas0 libopenblas-dev libgd-dev libgd3
+                NUMPOWER_LINUX_LIBS: ${{ matrix.dependencies }}
             - name: Compile Extension
               run: |
-                  sudo apt-get install -y --no-install-recommends ${{ matrix.dependencies }}
                   phpize
                   ./configure
                   make
 
-            - name: Execute tests
+            - name: Execute tests USE_ZEND_ALLOC 1
               run: make test
               env:
                   NDARRAY_FREEBUFFER: 1
                   USE_ZEND_ALLOC: 1
+
+            - name: Execute tests USE_ZEND_ALLOC 0
+              run: make test
+              env:
+                  USE_ZEND_ALLOC: 0
