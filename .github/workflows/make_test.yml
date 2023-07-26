@@ -27,11 +27,6 @@ jobs:
                   tools: phpize
               env:
                 NUMPOWER_LINUX_LIBS: ${{ matrix.dependencies }}
-            - name: Compile Extension
-              run: |
-                  phpize
-                  ./configure
-                  make
 
             - name: Execute tests USE_ZEND_ALLOC 1
               run: make test
