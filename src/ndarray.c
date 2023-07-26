@@ -24,7 +24,7 @@
 #endif
 
 #ifdef HAVE_GD
-#include "gd.h"
+#include "libgd/gd.h"
 
 typedef struct _gd_ext_image_object {
     gdImagePtr image;
